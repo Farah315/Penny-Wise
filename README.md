@@ -1,6 +1,6 @@
 # Penny Wise
 
-A personal finance management application built with Flutter and Firebase.
+A personal finance management application 
 
 ---
 
@@ -12,6 +12,7 @@ A personal finance management application built with Flutter and Firebase.
 - [Technology Stack](#technology-stack)
 - [Architecture](#architecture)
 - [Installation](#installation)
+- [Configuration](#configuration)
 
 ---
 
@@ -60,17 +61,17 @@ Penny Wise is a cross-platform mobile application designed to help individuals t
 
 ## Screenshots
 
-### Login Screen
-![Login Screen](screenshots/login_screen.png)
+### Register Screen
+<img width="590" height="1280" alt="Register Screen" src="https://github.com/user-attachments/assets/22c3e1ea-7ba7-4a11-ae88-0876603b3f19" />
 
-### Dashboard
-![Home Dashboard](screenshots/home_dashboard.png)
+### Home Dashboard
+<img width="664" height="1280" alt="Home Dashboard" src="https://github.com/user-attachments/assets/faedfa23-2de3-4cad-b490-272d3abaa5c6" />
 
 ### Add Expense
-![Add Expense](screenshots/add_expense.png)
+<img width="623" height="1280" alt="Add Expense" src="https://github.com/user-attachments/assets/99fa52bb-f391-43d7-9d7f-33e2be8a5bef" />
 
 ### Expense List
-![Expense List](screenshots/expense_list.png)
+<img width="666" height="1280" alt="Expense List" src="https://github.com/user-attachments/assets/74df5585-81ba-4a92-87e2-1550b20e8c44" />
 
 ---
 
@@ -89,6 +90,30 @@ Penny Wise is a cross-platform mobile application designed to help individuals t
 ### State Management
 - **BLoC Pattern** - Business Logic Component architecture
 - **flutter_bloc** - State management library
+
+---
+
+## Architecture
+
+The application follows Clean Architecture principles with three distinct layers:
+
+### Presentation Layer
+- UI components and screens
+- BLoC state management
+- User interaction handling
+- Navigation logic
+
+### Domain Layer
+- Business entities
+- Use cases
+- Repository interfaces
+- Business rules
+
+### Data Layer
+- Repository implementations
+- Local data source (SQLite)
+- Remote data source (Firebase)
+- Data models and transformations
 
 ---
 
@@ -114,17 +139,17 @@ flutter pub get
 ```
 
 3. Set up Firebase
-    - Create a Firebase project at Firebase Console
-    - Add Android/iOS apps to your project
-    - Download configuration files:
-        - `google-services.json` for Android
-        - `GoogleService-Info.plist` for iOS
-    - Place files in their respective directories
+   - Create a Firebase project at Firebase Console
+   - Add Android/iOS apps to your project
+   - Download configuration files:
+     - `google-services.json` for Android
+     - `GoogleService-Info.plist` for iOS
+   - Place files in their respective directories
 
 4. Enable Firebase services
-    - Enable Authentication with Email/Password
-    - Enable Realtime Database
-    - Configure database security rules
+   - Enable Authentication with Email/Password
+   - Enable Realtime Database
+   - Configure database security rules
 
 5. Run the application
 ```bash
