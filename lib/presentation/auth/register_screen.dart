@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'login_screen.dart';
-import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,110 +27,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  Future<void> _registerWithEmailPassword() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
-      // Create user account
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
 
-      // Update display name
-      await userCredential.user!.updateDisplayName(_nameController.text.trim());
+      await userCredential.user?.updateDisplayName(_nameController.text.trim());
 
-      // Send email verification
-      await userCredential.user!.sendEmailVerification();
-
-      if (!mounted) return;
-
-      // Show success message
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          title: Row(
-            children: [
-              Icon(Icons.mark_email_read, color: Colors.green.shade700, size: 30),
-              const SizedBox(width: 10),
-              const Text('Account Created'),
-            ],
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Account created successfully!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
           ),
-          content: const Text(
-            'A verification link has been sent to your email.\nPlease verify your email before signing in.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-      );
+        );
+
+        await Future.delayed(const Duration(seconds: 1));
+        if (mounted) {
+          Navigator.pop(context);
+        }
+      }
     } on FirebaseAuthException catch (e) {
       String message = 'An error occurred';
       if (e.code == 'weak-password') {
-        message = 'Password is too weak';
+        message = 'The password is too weak';
       } else if (e.code == 'email-already-in-use') {
-        message = 'Email already in use';
+        message = 'An account already exists with this email';
       } else if (e.code == 'invalid-email') {
         message = 'Invalid email address';
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
-      );
-      setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    setState(() => _isLoading = true);
-
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        setState(() => _isLoading = false);
-        return;
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: Colors.red),
+        );
       }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      if (!mounted) return;
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to sign up with Google'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
       setState(() => _isLoading = false);
     }
   }
@@ -159,46 +94,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // App Logo/Icon
+                  // Logo/Icon
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.green.shade700,
+                      color: Colors.deepPurple.shade700,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.person_add,
-                      size: 50,
+                      size: 60,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
                   // Title
                   Text(
-                    'Create New Account',
+                    'Create Account',
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green.shade700,
+                      color: Colors.deepPurple.shade700,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Enter your information to register',
+                    'Sign up to get started with Penny Wise',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 40),
 
                   // Name Field
                   TextFormField(
                     controller: _nameController,
+                    textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
-                      labelText: 'Username',
-                      prefixIcon: Icon(Icons.person, color: Colors.green.shade700),
+                      labelText: 'Full Name',
+                      prefixIcon: Icon(Icons.person, color: Colors.deepPurple.shade700),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -208,17 +144,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.green.shade700, width: 2),
+                        borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
                       ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
+                        return 'Please enter your name';
                       }
-                      if (value.length < 3) {
-                        return 'Username must be at least 3 characters';
+                      if (value.length < 2) {
+                        return 'Name must be at least 2 characters';
                       }
                       return null;
                     },
@@ -231,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email, color: Colors.green.shade700),
+                      prefixIcon: Icon(Icons.email, color: Colors.deepPurple.shade700),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -241,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.green.shade700, width: 2),
+                        borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -258,17 +194,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Password Field
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock, color: Colors.green.shade700),
+                      prefixIcon: Icon(Icons.lock, color: Colors.deepPurple.shade700),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.grey,
+                          color: Colors.grey[600],
                         ),
                         onPressed: () {
                           setState(() => _obscurePassword = !_obscurePassword);
@@ -283,14 +218,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.green.shade700, width: 2),
+                        borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
                       ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Please enter a password';
                       }
                       if (value.length < 6) {
                         return 'Password must be at least 6 characters';
@@ -300,17 +235,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Confirm Password Field
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
-                      prefixIcon: Icon(Icons.lock_outline, color: Colors.green.shade700),
+                      prefixIcon: Icon(Icons.lock_outline, color: Colors.deepPurple.shade700),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.grey,
+                          color: Colors.grey[600],
                         ),
                         onPressed: () {
                           setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
@@ -325,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.green.shade700, width: 2),
+                        borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -342,14 +276,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Register Button
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _registerWithEmailPassword,
+                      onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade700,
+                        backgroundColor: Colors.deepPurple.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -366,12 +299,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
-                  // Divider
                   Row(
                     children: [
-                      Expanded(child: Divider(color: Colors.grey.shade400)),
+                      Expanded(child: Divider(color: Colors.grey[400])),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
@@ -379,55 +311,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                       ),
-                      Expanded(child: Divider(color: Colors.grey.shade400)),
+                      Expanded(child: Divider(color: Colors.grey[400])),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
-                  // Google Sign In Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: OutlinedButton.icon(
-                      onPressed: _isLoading ? null : _signInWithGoogle,
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey.shade300),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        backgroundColor: Colors.white,
-                      ),
-                      icon: Image.network(
-                        'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg',
-                        height: 24,
-                      ),
-                      label: const Text(
-                        'Sign up with Google',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Login Link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account?',
-                        style: TextStyle(color: Colors.grey[600]),
+                        'Already have an account? ',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 16,
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
                         child: Text(
                           'Sign In',
                           style: TextStyle(
-                            color: Colors.green.shade700,
+                            color: Colors.deepPurple.shade700,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

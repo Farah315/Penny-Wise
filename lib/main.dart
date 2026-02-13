@@ -1,8 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'login_screen.dart';
-import 'home_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_wise/presentation/bloc/expense_bloc.dart';
+import 'package:penny_wise/presentation/pages/splash_screen.dart';
+import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,8 +16,14 @@ void main() async {
       messagingSenderId: "539539449958",
       projectId: "penny-wise-1f30c",
       storageBucket: "penny-wise-1f30c.firebasestorage.app",
+      databaseURL: "https://penny-wise-1f30c-default-rtdb.firebaseio.com",
     ),
   );
+  FirebaseDatabase.instance.setPersistenceEnabled(true);
+  FirebaseDatabase.instance.setPersistenceCacheSizeBytes(10000000);
+
+
+  await di.init();
 
   runApp(const MyApp());
 }
@@ -25,44 +33,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PennyWise',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => di.sl<ExpenseBloc>(),
+      child: MaterialApp(
+        title: 'Penny Wise',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+            primary: Colors.deepPurple.shade700,
+            secondary: Colors.purple.shade400,
+          ),
+          useMaterial3: true,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.deepPurple.shade700,
+            foregroundColor: Colors.white,
+            elevation: 0,
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.deepPurple.shade700,
+            foregroundColor: Colors.white,
+          ),
+        ),
+        home: const SplashScreen(),
       ),
-      home: const AuthWrapper(),
-    );
-  }
-}
-
-// AuthWrapper to check if user is logged in
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        // Show loading indicator while checking auth state
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-
-        // If user is logged in, go to home screen
-        if (snapshot.hasData) {
-          return const HomeScreen();
-        }
-
-        // If user is not logged in, go to login screen
-        return const LoginScreen();
-      },
     );
   }
 }

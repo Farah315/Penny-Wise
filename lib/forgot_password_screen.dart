@@ -78,11 +78,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.orange.shade700,
+              color: Colors.deepPurple.shade700,
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -93,13 +92,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 30),
 
-          // Title
           Text(
             'Forgot Password?',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Colors.green.shade700,
+              color: Colors.deepPurple.shade700,
             ),
           ),
           const SizedBox(height: 10),
@@ -113,13 +111,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 40),
 
-          // Email Field
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: 'Email',
-              prefixIcon: Icon(Icons.email, color: Colors.green.shade700),
+              prefixIcon: Icon(Icons.email, color: Colors.deepPurple.shade700),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -129,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.green.shade700, width: 2),
+                borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
               ),
               filled: true,
               fillColor: Colors.white,
@@ -146,14 +143,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 30),
 
-          // Reset Password Button
           SizedBox(
             width: double.infinity,
             height: 55,
             child: ElevatedButton(
               onPressed: _isLoading ? null : _resetPassword,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green.shade700,
+                backgroundColor: Colors.deepPurple.shade700,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -172,13 +168,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 20),
 
-          // Back to Login
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Back to Sign In',
               style: TextStyle(
-                color: Colors.green.shade700,
+                color: Colors.deepPurple.shade700,
                 fontSize: 16,
               ),
             ),
@@ -192,33 +187,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Success Icon
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.green.shade100,
+            color: Colors.deepPurple.shade100,
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.mark_email_read,
             size: 80,
-            color: Colors.green.shade700,
+            color: Colors.deepPurple.shade700,
           ),
         ),
         const SizedBox(height: 30),
 
-        // Success Title
         Text(
           'Email Sent!',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Colors.green.shade700,
+            color: Colors.deepPurple.shade700,
           ),
         ),
         const SizedBox(height: 15),
 
-        // Success Message
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
@@ -241,11 +233,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         const SizedBox(height: 40),
 
-        // Didn't receive email
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: Colors.deepPurple.shade50,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -272,7 +263,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         const SizedBox(height: 30),
 
-        // Resend Email Button
         SizedBox(
           width: double.infinity,
           height: 55,
@@ -282,7 +272,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               _resetPassword();
             },
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.green.shade700, width: 2),
+              side: BorderSide(color: Colors.deepPurple.shade700, width: 2),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -292,21 +282,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.green.shade700,
+                color: Colors.deepPurple.shade700,
               ),
             ),
           ),
         ),
         const SizedBox(height: 15),
 
-        // Back to Login Button
         SizedBox(
           width: double.infinity,
           height: 55,
           child: ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green.shade700,
+              backgroundColor: Colors.deepPurple.shade700,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
