@@ -9,16 +9,7 @@ import 'injection_container.dart' as di;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyDzY4pmq_-JjXnyfFmIGcS7pJY126JGYTU",
-      appId: "1:539539449958:android:95e1fa61efd3783cb1a5a7",
-      messagingSenderId: "539539449958",
-      projectId: "penny-wise-1f30c",
-      storageBucket: "penny-wise-1f30c.firebasestorage.app",
-      databaseURL: "https://penny-wise-1f30c-default-rtdb.firebaseio.com",
-    ),
-  );
+  await Firebase.initializeApp();
   FirebaseDatabase.instance.setPersistenceEnabled(true);
   FirebaseDatabase.instance.setPersistenceCacheSizeBytes(10000000);
 
