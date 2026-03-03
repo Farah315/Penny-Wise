@@ -36,7 +36,6 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
         expenses.add(ExpenseModel.fromFirebase(key, value as Map<dynamic, dynamic>));
       });
 
-      // Sort by date descending
       expenses.sort((a, b) => b.date.compareTo(a.date));
 
       return expenses;
@@ -51,11 +50,9 @@ class ExpenseRemoteDataSourceImpl implements ExpenseRemoteDataSource {
       final ref = _getUserExpensesRef(expense.userId);
 
       if (expense.id != null) {
-        // Use existing ID
         await ref.child(expense.id!).set(expense.toFirebase());
         return expense.id!;
       } else {
-        // Generate new ID
         final newRef = ref.push();
         await newRef.set(expense.toFirebase());
         return newRef.key!;
