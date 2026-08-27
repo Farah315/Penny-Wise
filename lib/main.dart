@@ -18,7 +18,6 @@ void main() async {
       storageBucket: "penny-wise-1f30c.firebasestorage.app",
     ),
   );
-
   FirebaseDatabase.instance.setPersistenceEnabled(true);
   FirebaseDatabase.instance.setPersistenceCacheSizeBytes(10000000);
 
